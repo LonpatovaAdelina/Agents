@@ -6,19 +6,19 @@ This rule describes how to generate a concrete Product Requirements Document (PR
 
 ### Task
 
-- [ ] Take the user's product request from the current conversation.
-- [ ] Infer the core idea, audience, and constraints.
-- [ ] Generate a structured PRD that describes the concrete product to be built.
-- [ ] Save or update the PRD in the specified file.
+Take the user's product request from the current conversation.
+Infer the core idea, audience, and constraints.
+Generate a structured PRD that describes the concrete product to be built.
+Save or update the PRD in the specified file.
 
 ---
 
 ### Inputs
 
-- [ ] **Natural-language request** in the current conversation, e.g.:
+**Natural-language request** in the current conversation, e.g.:
   - "Create a note-taking app for students."
   - "I need a small CRM for freelancers."
-- [ ] **Contextual hints** (if present):
+   **Contextual hints** (if present):
   - Target platform (web, mobile, desktop, API).
   - Tech stack, integrations, constraints.
   - Deadlines, scope level (MVP vs. full product).
@@ -179,3 +179,4 @@ Recommended PRD sections to generate:
 - [ ] Core product architecture is sketched at a high level.
 - [ ] Assumptions and open questions are explicitly listed.
 - [ ] The PRD is written in clear, concise language suitable for designers and engineers.
+
