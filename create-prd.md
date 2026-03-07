@@ -169,43 +169,19 @@ Each requirement should be testable (avoid "should feel intuitive").
 
 ---
 
-### 10. Architecture Overview
+### 10. Technical Preferences (input for architect)
 
-- High-level diagram description (or ASCII sketch if helpful)
-- Key components and their responsibilities
-- Data flow summary
-- Directory / module structure (if applicable)
+Capture only what the user has explicitly stated — do not design, only record:
+- Preferred languages or frameworks (if mentioned)
+- Existing infrastructure to integrate with (if any)
+- Hard constraints: budget, team skills, compliance requirements
+- Scale expectations (rough order of magnitude)
 
----
-
-### 11. Technology Stack
-
-| Layer | Technology | Version | Rationale |
-|-------|-----------|---------|-----------|
-| Frontend | ... | ... | ... |
-| Backend | ... | ... | ... |
-| Database | ... | ... | ... |
-| Infra | ... | ... | ... |
-
-Include optional/future dependencies separately.
+> ⚠️ Full architecture, tech stack, and API spec are produced by the `architect` agent in `ARCHITECTURE.md` — do not design them here.
 
 ---
 
-### 12. API Specification (if applicable)
-
-For each endpoint:
-```
-METHOD /path
-Description: ...
-Auth: required / optional / none
-Request: { ... }
-Response: { ... }
-Errors: 400, 401, 404, 500
-```
-
----
-
-### 13. Security & Configuration
+### 11. Security & Configuration
 
 - Auth approach (e.g. JWT, OAuth, API keys)
 - Secrets management
@@ -214,7 +190,7 @@ Errors: 400, 401, 404, 500
 
 ---
 
-### 14. Success Criteria
+### 12. Success Criteria
 
 MVP is considered successful when:
 - ✅ Functional criteria (what works)
@@ -223,23 +199,20 @@ MVP is considered successful when:
 
 ---
 
-### 15. Implementation Phases
+### 13. Implementation Phases (high-level only)
 
-#### Phase 1 — Foundation (Week X–Y)
-**Goal:** [What this phase achieves]
-- ✅ Deliverable 1
-- ✅ Deliverable 2
-**Validation:** [How to know this phase is done]
+List 2–4 phases as **one sentence each** — no deliverables, no timelines. Detailed planning is handled by `plan-feature.md`.
 
-#### Phase 2 — Core Features (Week X–Y)
-...
+Example:
+- **Phase 1 — Foundation:** core data models, auth, project scaffold
+- **Phase 2 — Core Features:** primary user-facing functionality
+- **Phase 3 — Polish & Launch:** error handling, docs, deployment prep
 
-#### Phase 3 — Polish & Launch (Week X–Y)
-...
+> ⚠️ Detailed subtasks, file lists, and timelines are produced by `commands/core_piv_loop/plan-feature.md` — do not detail them here.
 
 ---
 
-### 16. Risks & Mitigations
+### 14. Risks & Mitigations
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
@@ -249,7 +222,7 @@ Include 4–6 risks. Think about: technical debt, third-party dependencies, scop
 
 ---
 
-### 17. Open Questions
+### 15. Open Questions
 
 List unresolved decisions that need input:
 - [ ] Question or decision point
@@ -257,7 +230,7 @@ List unresolved decisions that need input:
 
 ---
 
-### 18. Future Considerations
+### 16. Future Considerations
 
 Features and ideas intentionally deferred:
 - Post-MVP enhancements
@@ -267,7 +240,7 @@ Features and ideas intentionally deferred:
 
 ---
 
-### 19. Appendix (optional)
+### 17. Appendix (optional)
 
 - Links to related documents, designs, or repos
 - Glossary of terms
@@ -282,6 +255,7 @@ After generating the PRD:
 2. List any `[ASSUMED]` items that need user validation
 3. List any Open Questions that block progress
 4. Suggest the immediate next step
+5. **Update pipeline status:** set `status → "designing_architecture"` to signal `orchestrator` that `analyst` has completed and `architect` can proceed
 
 ---
 
