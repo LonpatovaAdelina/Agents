@@ -1,184 +1,295 @@
-## create-prd – PRD Generator Rule
+---
+description: Gather requirements from the user and generate a Product Requirements Document (PRD)
+argument-hint: [output-filename]
+---
 
-This rule describes how to generate a concrete Product Requirements Document (PRD) for a new product based on a natural-language user request (e.g., "create a note-taking app").
+# Create PRD: Product Requirements Document Generator
+
+## Overview
+
+This instruction guides the agent through a **two-phase process**:
+1. **Discovery** — gather product requirements through structured dialogue with the user
+2. **Generation** — produce a complete `PRD.md` based on collected information
+
+Output file: `$ARGUMENTS` (default: `PRD.md`)
 
 ---
 
-### Task
+## Phase 1: Discovery (Requirements Gathering)
 
-Take the user's product request from the current conversation.
-Infer the core idea, audience, and constraints.
-Generate a structured PRD that describes the concrete product to be built.
-Save or update the PRD in the specified file.
+Before writing anything, the agent must understand the product deeply.
 
----
+### Step 1 — Initial Read
+Review the full conversation history. Extract:
+- Product idea / concept
+- Any mentioned features, constraints, or goals
+- Technical preferences or stack mentions
+- Target audience hints
 
-### Inputs
+### Step 2 — Clarifying Questions
+Ask the user **only the questions that remain unanswered** after reading the conversation. Group them logically and ask no more than **5–7 questions at once** to avoid overwhelming the user.
 
-**Natural-language request** in the current conversation, e.g.:
-  - "Create a note-taking app for students."
-  - "I need a small CRM for freelancers."
-   **Contextual hints** (if present):
-  - Target platform (web, mobile, desktop, API).
-  - Tech stack, integrations, constraints.
-  - Deadlines, scope level (MVP vs. full product).
-   **Target file path** (if given); otherwise choose a sensible default `prd.md`.
+Use this question bank as a guide (adapt, skip, or add as needed):
 
----
+**Product Identity**
+- What problem does this product solve? Who has this problem?
+- What makes this product different from existing solutions?
+- What does success look like in 3 months after launch?
 
-### Output
+**Users**
+- Who is the primary user? (role, technical skill level, context of use)
+- Are there secondary user types (e.g. admins, API consumers)?
 
-A single markdown PRD document that:
-  - Describes a **specific, concrete product** derived from the request.
-  - Is structured and scannable.
-  - Can be handed directly to designers/engineers as a starting point.
+**Scope**
+- What is the single most important feature for MVP?
+- What features are explicitly out of scope for now?
+- Are there hard deadlines or resource constraints?
 
-Recommended PRD sections to generate:
+**Technical**
+- Is there a preferred tech stack or existing infrastructure to integrate with?
+- What are the expected scale / load requirements?
+- Any compliance, security, or data residency requirements?
 
--  Overview
--  Problem Statement
--  Goals & Non-Goals
--  Users & Use Cases
--  Product Scope & Features
--  Core Architecture (of the product)
--  UX / UI & Flows
--  Dependencies & Risks
--  Metrics & Success Criteria
--  Release Plan
--  Open Questions / Assumptions
+**Integrations**
+- Does the product need to connect to external services? (auth, payments, AI, etc.)
+- Will there be a public API?
 
----
+### Step 3 — Confirm Understanding
+After gathering answers, provide a **1-paragraph summary** of your understanding and ask the user to confirm or correct before generating the PRD.
 
-### Workflow
-
-- **1. Understand the request**
-  - Parse the last user message and recent context.
-  - Clarify internally:
-    - What kind of product is this? (e.g., note-taking app, booking system, dashboard).
-    - Who is the primary audience?
-    - What are the main problems this product solves?
-
-- **2. Build a product concept**
-  - Derive:
-    - Product name and short one-sentence summary.
-    - Primary and secondary user groups.
-    - Core value proposition.
-
-- **3. Define product structure**
-  - Identify:
-    - Main modules / features.
-    - Key entities (e.g., Notes, Tags, Workspaces, Users).
-    - High-level navigation / screen map (for UI products).
-
-- **4. Generate the PRD**
-  - Fill each PRD section with:
-    - Clear prose.
-    - Bullet lists for features and flows.
-    - Explicit assumptions and open questions where information is missing.
-
-- **5. Persist the PRD**
-  - If the file does not exist, create it.
-  - If it exists, either:
-    - Append a new dated version, or
-    - Replace existing content (depending on configuration or instruction).
+> Example: "Based on our conversation, I understand you're building X for Y users, with Z as the core MVP feature, using [stack]. The main constraint is [constraint]. Is this correct?"
 
 ---
 
-### Tools / Features (How the Generator Works)
+## Phase 2: PRD Generation
 
-- **Request Analyzer**
-  - Reads the user request and recent conversation.
-  - Extracts:
-    - Product type (app, API, tool, etc.).
-    - Domain (education, productivity, finance, etc.).
-    - Target users and usage context.
-    - Explicit constraints (tech stack, platforms, integrations).
+Once requirements are confirmed, generate the PRD using the structure below.
 
-- **Product Model Builder**
-  - Converts the request into an internal **product model** that includes:
-    - `productName`
-    - `tagline` / summary
-    - `primaryUsers` / `secondaryUsers`
-    - `keyProblems`
-    - `coreFeatures` and `stretchFeatures`
-    - `nonGoals`
-    - `constraints` and `assumptions`
-  - Infers reasonable defaults when the user is vague (e.g., basic auth, responsive UI, minimal analytics).
-
-- **Feature & Structure Generator**
-  - From the product model, generates:
-    - List of concrete features grouped by area (e.g., Capture, Organize, Share).
-    - Conceptual information architecture (entities and relationships).
-    - Suggested screen list or modules:
-      - For apps: main screens, settings, onboarding, admin.
-      - For APIs: core endpoints and resources.
-
-- **PRD Template Renderer**
-  - Maps the product model into the PRD sections listed in **Output**.
-  - Uses markdown headings, bullets, and numbered lists.
-  - Adds explicit "Open Questions" for uncertain or ambiguous parts of the request.
-
-- **File Writer**
-  - Determines the final file path (requested vs. default).
-  - Ensures directories exist (e.g., `prd/`).
-  - Writes the generated PRD content in a single operation.
-  - Avoids duplicating identical content on repeated runs.
+### Writing Principles
+- **Be specific** — avoid vague statements like "the app should be fast"; prefer "API responses < 200ms under normal load"
+- **Be honest about unknowns** — mark assumptions explicitly with `[ASSUMED]`
+- **Be scannable** — use headings, bullets, tables, checkboxes
+- **Be consistent** — use the same terminology throughout
 
 ---
 
-### Core Architecture (Generator Program)
+## PRD Structure
 
-- **High-Level Overview**
-  - The generator program is a pipeline with four main stages:
-    1. Input & Context Collection
-    2. Product Intent Modeling
-    3. PRD Synthesis
-    4. File Output
-
-- **Components**
-  - **InputCollector**
-    - Reads the latest user request and recent conversation.
-    - Normalizes text (removes noise, consolidates constraints).
-  - **IntentEngine**
-    - Identifies user roles, problems, and desired outcomes.
-    - Classifies product type and domain.
-    - Builds the internal product model.
-  - **StructureEngine**
-    - Expands the product model into:
-      - Feature sets (MVP vs. later).
-      - Entities and relationships.
-      - High-level architecture notes (frontend, backend, storage, integrations).
-  - **PrdFormatter**
-    - Converts the structured model into markdown.
-    - Ensures all required sections are present.
-    - Adds TODOs and questions where data is missing.
-  - **FileManager**
-    - Resolves and validates the target path.
-    - Reads existing content (if any) when appending versions.
-    - Writes the final markdown.
-
-- **Extensibility**
-  - Allow configuration for:
-    - Level of detail (brief vs. detailed PRD).
-    - Section set (add/remove sections such as Legal, Compliance, Localization).
-    - Naming conventions for PRD files.
-
-- **Error Handling**
-  - If no clear product idea can be inferred:
-    - Generate a short explanation and suggested clarifying questions instead of a PRD.
-  - If file operations fail:
-    - Surface a clear error message rather than silently discarding the PRD.
+### 1. Header Block
+```
+Product: [Name]
+Version: 0.1 (MVP Draft)
+Status: Draft
+Last Updated: [date]
+Author: [agent/user]
+```
 
 ---
 
-### Quality Checklist
+### 2. Executive Summary
+- What the product is (1 sentence)
+- What problem it solves and for whom (1–2 sentences)
+- Core value proposition
+- MVP goal: what "done" looks like for v1
 
-- PRD clearly describes a **concrete product**, not just a vague idea.
-- All key sections in **Output** are present.
-- Features are grouped logically and are tied to user problems.
-- Core product architecture is sketched at a high level.
-- Assumptions and open questions are explicitly listed.
-- The PRD is written in clear, concise language suitable for designers and engineers.
+---
 
+### 3. Problem Statement
+- Current pain: what users struggle with today
+- Root cause: why existing solutions fall short
+- Impact: consequences of the problem remaining unsolved
 
+---
 
+### 4. Goals & Non-Goals
+
+| Category | Item |
+|----------|------|
+| ✅ Goal | ... |
+| ❌ Non-Goal | ... |
+
+Keep this table tight — 5–8 items max per column.
+
+---
+
+### 5. Target Users
+
+For each persona:
+- **Name / Role**
+- **Context:** when and how they use the product
+- **Key needs:** top 3 things they need
+- **Pain points:** what frustrates them today
+- **Technical comfort:** beginner / intermediate / advanced
+
+---
+
+### 6. MVP Scope
+
+#### In Scope ✅
+Group by category (Core, Technical, Integrations, Deployment):
+- ✅ Feature or requirement
+
+#### Out of Scope ❌
+- ❌ Feature deferred to future phases
+
+---
+
+### 7. User Stories
+
+Format: `As a [persona], I want to [action], so that [outcome].`
+
+Include:
+- 5–8 primary stories covering the core loop
+- 2–3 edge case or error state stories
+- Acceptance criteria for each (bullet list)
+
+---
+
+### 8. Functional Requirements
+
+Numbered list, grouped by feature area:
+
+```
+FR-01 [Feature Area]: [Requirement description]
+FR-02 ...
+```
+
+Each requirement should be testable (avoid "should feel intuitive").
+
+---
+
+### 9. Non-Functional Requirements
+
+| Requirement | Target | Priority |
+|-------------|--------|----------|
+| Performance | ... | High |
+| Availability | ... | Medium |
+| Security | ... | High |
+| Scalability | ... | Low (MVP) |
+
+---
+
+### 10. Architecture Overview
+
+- High-level diagram description (or ASCII sketch if helpful)
+- Key components and their responsibilities
+- Data flow summary
+- Directory / module structure (if applicable)
+
+---
+
+### 11. Technology Stack
+
+| Layer | Technology | Version | Rationale |
+|-------|-----------|---------|-----------|
+| Frontend | ... | ... | ... |
+| Backend | ... | ... | ... |
+| Database | ... | ... | ... |
+| Infra | ... | ... | ... |
+
+Include optional/future dependencies separately.
+
+---
+
+### 12. API Specification (if applicable)
+
+For each endpoint:
+```
+METHOD /path
+Description: ...
+Auth: required / optional / none
+Request: { ... }
+Response: { ... }
+Errors: 400, 401, 404, 500
+```
+
+---
+
+### 13. Security & Configuration
+
+- Auth approach (e.g. JWT, OAuth, API keys)
+- Secrets management
+- Environment variables list (names only, no values)
+- What's explicitly out of scope for security in MVP
+
+---
+
+### 14. Success Criteria
+
+MVP is considered successful when:
+- ✅ Functional criteria (what works)
+- ✅ Quality criteria (performance, error rate)
+- ✅ User criteria (can complete core task without help)
+
+---
+
+### 15. Implementation Phases
+
+#### Phase 1 — Foundation (Week X–Y)
+**Goal:** [What this phase achieves]
+- ✅ Deliverable 1
+- ✅ Deliverable 2
+**Validation:** [How to know this phase is done]
+
+#### Phase 2 — Core Features (Week X–Y)
+...
+
+#### Phase 3 — Polish & Launch (Week X–Y)
+...
+
+---
+
+### 16. Risks & Mitigations
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+| ... | High/Med/Low | High/Med/Low | ... |
+
+Include 4–6 risks. Think about: technical debt, third-party dependencies, scope creep, team capacity.
+
+---
+
+### 17. Open Questions
+
+List unresolved decisions that need input:
+- [ ] Question or decision point
+- [ ] ...
+
+---
+
+### 18. Future Considerations
+
+Features and ideas intentionally deferred:
+- Post-MVP enhancements
+- Scaling strategies
+- Integration opportunities
+- Advanced features for later phases
+
+---
+
+### 19. Appendix (optional)
+
+- Links to related documents, designs, or repos
+- Glossary of terms
+- Reference architecture examples
+
+---
+
+## Output Confirmation
+
+After generating the PRD:
+1. State the file path where it was written
+2. List any `[ASSUMED]` items that need user validation
+3. List any Open Questions that block progress
+4. Suggest the immediate next step
+
+---
+
+## Agent Behavior Notes
+
+- Do **not** skip Phase 1 if requirements are vague — always clarify first
+- Do **not** invent features not discussed or implied by the user
+- Do **not** ask all questions at once if only 2–3 are truly unknown
+- **Do** flag contradictions in user requirements and ask for resolution
+- **Do** mark every assumption with `[ASSUMED]` so the user can spot them quickly
+- Sections with insufficient information should say: `⚠️ Needs clarification — see Open Questions`
