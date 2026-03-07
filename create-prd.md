@@ -22,7 +22,7 @@ Save or update the PRD in the specified file.
   - Target platform (web, mobile, desktop, API).
   - Tech stack, integrations, constraints.
   - Deadlines, scope level (MVP vs. full product).
-   **Target file path** (if given); otherwise choose a sensible default such as `prd/<slugified-product-name>.md`.
+   **Target file path** (if given); otherwise choose a sensible default `prd.md`.
 
 ---
 
@@ -179,5 +179,6 @@ Recommended PRD sections to generate:
 - Core product architecture is sketched at a high level.
 - Assumptions and open questions are explicitly listed.
 - The PRD is written in clear, concise language suitable for designers and engineers.
+
 
 
