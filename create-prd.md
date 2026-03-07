@@ -22,61 +22,61 @@ Save or update the PRD in the specified file.
   - Target platform (web, mobile, desktop, API).
   - Tech stack, integrations, constraints.
   - Deadlines, scope level (MVP vs. full product).
-- [ ] **Target file path** (if given); otherwise choose a sensible default such as `prd/<slugified-product-name>.md`.
+   **Target file path** (if given); otherwise choose a sensible default such as `prd/<slugified-product-name>.md`.
 
 ---
 
 ### Output
 
-- [ ] A single markdown PRD document that:
+A single markdown PRD document that:
   - Describes a **specific, concrete product** derived from the request.
   - Is structured and scannable.
   - Can be handed directly to designers/engineers as a starting point.
 
 Recommended PRD sections to generate:
 
-- [ ] Overview
-- [ ] Problem Statement
-- [ ] Goals & Non-Goals
-- [ ] Users & Use Cases
-- [ ] Product Scope & Features
-- [ ] Core Architecture (of the product)
-- [ ] UX / UI & Flows
-- [ ] Dependencies & Risks
-- [ ] Metrics & Success Criteria
-- [ ] Release Plan
-- [ ] Open Questions / Assumptions
+-  Overview
+-  Problem Statement
+-  Goals & Non-Goals
+-  Users & Use Cases
+-  Product Scope & Features
+-  Core Architecture (of the product)
+-  UX / UI & Flows
+-  Dependencies & Risks
+-  Metrics & Success Criteria
+-  Release Plan
+-  Open Questions / Assumptions
 
 ---
 
 ### Workflow
 
-- [ ] **1. Understand the request**
+- **1. Understand the request**
   - Parse the last user message and recent context.
   - Clarify internally:
     - What kind of product is this? (e.g., note-taking app, booking system, dashboard).
     - Who is the primary audience?
     - What are the main problems this product solves?
 
-- [ ] **2. Build a product concept**
+- **2. Build a product concept**
   - Derive:
     - Product name and short one-sentence summary.
     - Primary and secondary user groups.
     - Core value proposition.
 
-- [ ] **3. Define product structure**
+- **3. Define product structure**
   - Identify:
     - Main modules / features.
     - Key entities (e.g., Notes, Tags, Workspaces, Users).
     - High-level navigation / screen map (for UI products).
 
-- [ ] **4. Generate the PRD**
+- **4. Generate the PRD**
   - Fill each PRD section with:
     - Clear prose.
     - Bullet lists for features and flows.
     - Explicit assumptions and open questions where information is missing.
 
-- [ ] **5. Persist the PRD**
+- **5. Persist the PRD**
   - If the file does not exist, create it.
   - If it exists, either:
     - Append a new dated version, or
@@ -86,7 +86,7 @@ Recommended PRD sections to generate:
 
 ### Tools / Features (How the Generator Works)
 
-- [ ] **Request Analyzer**
+- **Request Analyzer**
   - Reads the user request and recent conversation.
   - Extracts:
     - Product type (app, API, tool, etc.).
@@ -94,7 +94,7 @@ Recommended PRD sections to generate:
     - Target users and usage context.
     - Explicit constraints (tech stack, platforms, integrations).
 
-- [ ] **Product Model Builder**
+- **Product Model Builder**
   - Converts the request into an internal **product model** that includes:
     - `productName`
     - `tagline` / summary
@@ -105,7 +105,7 @@ Recommended PRD sections to generate:
     - `constraints` and `assumptions`
   - Infers reasonable defaults when the user is vague (e.g., basic auth, responsive UI, minimal analytics).
 
-- [ ] **Feature & Structure Generator**
+- **Feature & Structure Generator**
   - From the product model, generates:
     - List of concrete features grouped by area (e.g., Capture, Organize, Share).
     - Conceptual information architecture (entities and relationships).
@@ -113,12 +113,12 @@ Recommended PRD sections to generate:
       - For apps: main screens, settings, onboarding, admin.
       - For APIs: core endpoints and resources.
 
-- [ ] **PRD Template Renderer**
+- **PRD Template Renderer**
   - Maps the product model into the PRD sections listed in **Output**.
   - Uses markdown headings, bullets, and numbered lists.
   - Adds explicit "Open Questions" for uncertain or ambiguous parts of the request.
 
-- [ ] **File Writer**
+- **File Writer**
   - Determines the final file path (requested vs. default).
   - Ensures directories exist (e.g., `prd/`).
   - Writes the generated PRD content in a single operation.
@@ -128,14 +128,14 @@ Recommended PRD sections to generate:
 
 ### Core Architecture (Generator Program)
 
-- [ ] **High-Level Overview**
+- **High-Level Overview**
   - The generator program is a pipeline with four main stages:
     1. Input & Context Collection
     2. Product Intent Modeling
     3. PRD Synthesis
     4. File Output
 
-- [ ] **Components**
+- **Components**
   - **InputCollector**
     - Reads the latest user request and recent conversation.
     - Normalizes text (removes noise, consolidates constraints).
@@ -157,13 +157,13 @@ Recommended PRD sections to generate:
     - Reads existing content (if any) when appending versions.
     - Writes the final markdown.
 
-- [ ] **Extensibility**
+- **Extensibility**
   - Allow configuration for:
     - Level of detail (brief vs. detailed PRD).
     - Section set (add/remove sections such as Legal, Compliance, Localization).
     - Naming conventions for PRD files.
 
-- [ ] **Error Handling**
+- **Error Handling**
   - If no clear product idea can be inferred:
     - Generate a short explanation and suggested clarifying questions instead of a PRD.
   - If file operations fail:
@@ -173,10 +173,11 @@ Recommended PRD sections to generate:
 
 ### Quality Checklist
 
-- [ ] PRD clearly describes a **concrete product**, not just a vague idea.
-- [ ] All key sections in **Output** are present.
-- [ ] Features are grouped logically and are tied to user problems.
-- [ ] Core product architecture is sketched at a high level.
-- [ ] Assumptions and open questions are explicitly listed.
-- [ ] The PRD is written in clear, concise language suitable for designers and engineers.
+- PRD clearly describes a **concrete product**, not just a vague idea.
+- All key sections in **Output** are present.
+- Features are grouped logically and are tied to user problems.
+- Core product architecture is sketched at a high level.
+- Assumptions and open questions are explicitly listed.
+- The PRD is written in clear, concise language suitable for designers and engineers.
+
 
